@@ -19,25 +19,41 @@
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="WHa-kb-WpB">
                                 <rect key="frame" x="10" y="30" width="394" height="31"/>
                                 <subviews>
+                                    <button opaque="NO" tag="-1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sdZ-XN-wkh">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="31"/>
+                                        <color key="backgroundColor" systemColor="systemRedColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="31" id="4gN-cH-Dfy"/>
+                                            <constraint firstAttribute="width" constant="50" id="eqH-nf-xtS"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="&lt;-">
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="12"/>
+                                            <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <action selector="tapNavButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="M8x-JS-3Dd"/>
+                                        </connections>
+                                    </button>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="https://stackoverflow.com/questions/50207755/how-to-know-the-url-in-uipasteboard-general-url-is-valid" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EIw-zb-oV6">
-                                        <rect key="frame" x="0.0" y="0.0" width="340" height="31"/>
+                                        <rect key="frame" x="54" y="0.0" width="286" height="31"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T6G-P8-pUl">
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T6G-P8-pUl">
                                         <rect key="frame" x="344" y="0.0" width="50" height="31"/>
-                                        <color key="backgroundColor" red="0.61713314360000004" green="0.90806098719999995" blue="0.96033708409999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" systemColor="systemGreenColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="50" id="9Cc-Io-0dU"/>
                                             <constraint firstAttribute="height" constant="31" id="w5O-U1-Fwp"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Go">
+                                        <buttonConfiguration key="configuration" style="plain" title="-&gt;">
                                             <fontDescription key="titleFontDescription" type="system" pointSize="12"/>
                                             <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </buttonConfiguration>
                                         <connections>
-                                            <action selector="tapButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Eij-0F-QNd"/>
+                                            <action selector="tapNavButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Lev-2S-KeT"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -53,6 +69,8 @@
                     </view>
                     <connections>
                         <outlet property="addressBar" destination="EIw-zb-oV6" id="NMk-hg-Izf"/>
+                        <outlet property="navButtonBackward" destination="sdZ-XN-wkh" id="YSZ-hR-FDY"/>
+                        <outlet property="navButtonForeward" destination="T6G-P8-pUl" id="DUs-Ie-EZ2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -63,6 +81,12 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

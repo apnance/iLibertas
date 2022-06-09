@@ -10,20 +10,27 @@ import WebKit
 
 class ViewController: UIViewController {
     
-    @IBAction func tapButton(_ sender: Any) {
+    var webView: WKWebView!
+    var history         = [String]()
+    var _historicIndex  = 0
+    
+    @IBAction func tapNavButton(_ sender: Any) {
         
-        UIPasteboard.general.string = randomURL()
+        guard let button = sender as? UIButton
+        else { return /*EXIT*/ }
         
-        loadFromPastboard()
+        navigate(dir: button.tag)
         
     }
     
     @IBOutlet weak var addressBar: UITextField!
-    var webView: WKWebView!
+    @IBOutlet weak var navButtonBackward: UIButton!
+    @IBOutlet weak var navButtonForeward: UIButton!
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
-
+        
         let webVuConfiguration = WKWebViewConfiguration()
         webVuConfiguration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         webView = WKWebView(frame: view.frame,
@@ -31,73 +38,93 @@ class ViewController: UIViewController {
         
         view.addSubview(webView)
         view.sendSubviewToBack(webView)
-                
+        
+        uiVolatile()
+        
     }
     
-    
-    func randomURL() -> String {
+    fileprivate func loadURLFrom(_ stringURL: String) {
         
-        let urls = [
-            "https://www.seattletimes.com/seattle-news/northwest/public-tours-resume-at-historic-eastern-wa-nuclear-reactor-where-the-atomic-age-began/",
-            "https://www.seattletimes.com/seattle-news/politics/former-bothell-mayor-gop-gubernatorial-candidate-joshua-freed-accused-of-misleading-real-estate-investors/",
-            "https://www.seattletimes.com/life/food-drink/recipe-dal-with-curry-leaves/",
-            "https://www.seattletimes.com/nation-world/nation-politics/kellyanne-conway-trashes-shrewd-and-calculating-jared-kushner-in-new-tell-all-memoir/",
-            "https://www.seattletimes.com/nation-world/nation/former-state-ag-due-in-court-for-alleged-probation-violation/",
-            "https://www.seattletimes.com/opinion/americas-growing-fault-lines/",
-            "https://www.seattletimes.com/opinion/the-pack-has-the-lone-wolfs-back/",
-            "https://www.seattletimes.com/seattle-news/politics/we-asked-readers-how-roe-v-wade-has-affected-their-lives-here-are-your-stories/",
-            "https://www.seattletimes.com/business/starbucks-officially-leaving-russia-closing-130-stores/",
-            "https://www.seattletimes.com/business/redoing-pacific-place-as-offices-is-only-the-start-to-a-downtown-comeback/"
-        ]
-        
-        
-        return urls.randomElement!
-    
-    }
-    
-    func loadFromPastboard() {
-        
-        if UIPasteboard.general.hasStrings {
+        if let url = URL(string: stringURL),
+           url.scheme != nil,
+           url.scheme!.contains("http") {
             
-            print(UIPasteboard.general.string ?? "-?-")
-            
-            if let url = URL(string: UIPasteboard.general.string!) {
+            if !history.contains(stringURL) {
                 
-                print(url)
+                history.append(stringURL)
+                _historicIndex = history.lastUsableIndex
                 
-                let request = URLRequest(url: url)
-                webView.load(request)
-                addressBar.text = url.description
-                
-            } else {
-                
-                webView.loadHTMLString("<div style=\"font-size:30pt; font-weight: bold; text-align:center;\">Invalid URL</div>", baseURL: nil)
+                navigate(dir: 1)
                 
             }
             
-        } else if UIPasteboard.general.hasURLs {
+        } else {
             
-            print(UIPasteboard.general.url?.description ?? "-URL?-")
+            webView.loadHTMLString("<br/><br/><br/><br/><div style=\"font-size:30pt; font-weight: bold; text-align:center;\">Invalid URL</div>",
+                                   baseURL: nil)
             
         }
+        
+        uiVolatile()
+        
+    }
+    
+    func loadFromPasteboard() {
+        
+        if UIPasteboard.general.hasStrings {
+            
+            if let stringURL = UIPasteboard.general.string {
+                
+                loadURLFrom(stringURL)
+                
+            }
+            
+        }
+        
+        print(history)
+        
+    }
+    
+    fileprivate func navigate(dir: Int! = 1) {
+        
+        _historicIndex  += dir
+        _historicIndex  = min(history.lastUsableIndex, _historicIndex)
+        _historicIndex  = max(_historicIndex, 0)
+        
+        let url         = URL(string: history[_historicIndex])!
+        
+        print("Index: \(_historicIndex) - URL: \(history[_historicIndex])")
+        
+        webView.load(URLRequest(url: url))
+        uiVolatile()
+        
+    }
+    
+    fileprivate func uiVolatile() {
+        
+        navButtonBackward.isEnabled = _historicIndex > 0
+        navButtonForeward.isEnabled = _historicIndex < history.lastUsableIndex
+        
+        addressBar.text             = history.last ?? ""
         
     }
     
 }
 
 extension ViewController: WKUIDelegate {
-
-//    func webView(_ webView: WKWebView,
-//                 createWebViewWith configuration: WKWebViewConfiguration,
-//                 for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-//
-//        // Create new WKWebView with custom configuration here
-//        let webVuConfiguration = WKWebViewConfiguration()
-//        webVuConfiguration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
-////        webView.configuration = webVuConfiguration
-////        webView.configuration
-//
-//
-//        return WKWebView(frame: webView.frame, configuration: webVuConfiguration)
-//    }
+    
+    //    func webView(_ webView: WKWebView,
+    //                 createWebViewWith configuration: WKWebViewConfiguration,
+    //                 for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+    //
+    //        // Create new WKWebView with custom configuration here
+    //        let webVuConfiguration = WKWebViewConfiguration()
+    //        webVuConfiguration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+    ////        webView.configuration = webVuConfiguration
+    ////        webView.configuration
+    //
+    //
+    //        return WKWebView(frame: webView.frame, configuration: webVuConfiguration)
+    //    }
+    
 }
