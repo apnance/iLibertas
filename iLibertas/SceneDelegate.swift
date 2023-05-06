@@ -39,7 +39,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
         
-        (self.window?.rootViewController as? ViewController)?.loadFromPastboard()
+        print("FOREGROUNDING - calling loadFromPasteBoard()")
+        
+        (self.window?.rootViewController as? ViewController)?.loadFromPasteboard()
         
     }
     
